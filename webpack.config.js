@@ -4,7 +4,7 @@ const { ModuleFederationPlugin } = require('webpack').container;
 
 module.exports = {
   entry: './src/index.tsx',
-  mode: 'development',
+  mode: 'production',
   devServer: {
     port: 3001,
     headers: { 'Access-Control-Allow-Origin': '*' },
