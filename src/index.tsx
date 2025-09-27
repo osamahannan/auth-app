@@ -1,6 +1,6 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './Login';
 import UserProfile from './UserProfile';
 
@@ -11,7 +11,7 @@ if (container) {
   root.render(
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<div>Welcome to Auth App</div>} />
+        <Route path="/" element={<Navigate to="/auth/login" />} />
         <Route path="/auth/login" element={<Login />} />
         <Route path="/auth/profile" element={<UserProfile />} />
       </Routes>
