@@ -34,7 +34,7 @@ const Login: React.FC = () => {
           window.location.href = '/';
         }, 500);
       } else {
-        setError('Invalid credentials. Try admin/admin or user/user');
+        setError('Invalid password. Try admin or user');
       }
       setIsLoading(false);
     }, 1000);
@@ -93,7 +93,7 @@ const Login: React.FC = () => {
 
         <div className="auth-links">
           <p style={{ color: '#6b7280', fontSize: '0.8rem', marginTop: '1rem' }}>
-            Demo credentials: admin/admin or user/user
+            Demo credentials: admin or user
           </p>
         </div>
       </div>
