@@ -17,14 +17,22 @@ const Login: React.FC = () => {
     setError('');
 
     setTimeout(() => {
-      if (username === 'admin' && password === 'admin') {
+      if (password === 'admin') {
         window.dispatchEvent(new CustomEvent('userLoggedIn', { 
           detail: { username, role: 'admin' } 
         }));
-      } else if (username === 'user' && password === 'user') {
+        // Redirect to home page after successful login
+        setTimeout(() => {
+          window.location.href = '/';
+        }, 500);
+      } else if (password === 'user') {
         window.dispatchEvent(new CustomEvent('userLoggedIn', { 
           detail: { username, role: 'user' } 
         }));
+        // Redirect to home page after successful login
+        setTimeout(() => {
+          window.location.href = '/';
+        }, 500);
       } else {
         setError('Invalid credentials. Try admin/admin or user/user');
       }

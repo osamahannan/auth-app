@@ -6,10 +6,20 @@ const UserProfile: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    setTimeout(() => {
-      setUserInfo({ username: 'Demo User', role: 'admin' });
-      setIsLoading(false);
-    }, 1000);
+    // Get user data from localStorage
+    const savedUser = localStorage.getItem('user');
+    if (savedUser) {
+      try {
+        const userData = JSON.parse(savedUser);
+        setUserInfo({ username: userData.username, role: userData.role });
+      } catch (error) {
+        console.error('Error parsing user data:', error);
+        setUserInfo({ username: 'Unknown User', role: 'user' });
+      }
+    } else {
+      setUserInfo({ username: 'Guest User', role: 'user' });
+    }
+    setIsLoading(false);
   }, []);
 
   const handleLogout = () => {
@@ -56,7 +66,22 @@ const UserProfile: React.FC = () => {
                 </div>
                 <div className='info-row'>
                   <strong>Last Login:</strong>
-                  <div className="info-value">Just now</div>
+                  <div className="info-value">
+                    {(() => {
+                      const savedUser = localStorage.getItem('user');
+                      if (savedUser) {
+                        try {
+                          const userData = JSON.parse(savedUser);
+                          return userData.loginTime ? 
+                            new Date(userData.loginTime).toLocaleString() : 
+                            'Just now';
+                        } catch {
+                          return 'Just now';
+                        }
+                      }
+                      return 'Just now';
+                    })()}
+                  </div>
                 </div>
               </div>
             </div>
