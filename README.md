@@ -1,46 +1,62 @@
-Auth App (Micro-Frontend)
-This repository contains the Auth micro-frontend for the pluggable micro-frontend architecture. It exposes Login and UserProfile components via Webpack Module Federation, integrated into the host app dynamically.
-Setup Instructions
+Auth App
+The Auth App is a micro-frontend in a Webpack Module Federation architecture, providing authentication and user profile management using React and TypeScript.
+Repository
 
-Clone the repository:
-git clone <repository-url>
+GitHub: https://github.com/osamahannan/auth-app
+
+Features
+
+Authentication: Exposes Login and UserProfile components for user authentication and profile management.
+Self-Registration: Registers with the host via the moduleRegister event, providing metadata for public routes (/auth/login, /auth/profile).
+Role-Based Access: Routes are public (no permissions required), accessible to all users.
+Netlify Deployment: Independently deployed with CORS headers for remoteEntry.js.
+
+Setup
+
+Clone the Repository:git clone https://github.com/osamahannan/auth-app.git
 cd auth-app
 
 
-Install dependencies:
-npm install
+Install Dependencies:npm install
 
 
-Start the development server:
-npm start
+Run Locally:npm start
 
-The app runs on http://localhost:3001. Test independently or via the host app (http://localhost:3000).
+
+Opens at http://localhost:3001.
+Test standalone routes: http://localhost:3001/auth/login, http://localhost:3001/auth/profile.
+
+
+Build for Production:npm run build
+
+
+Outputs to dist/.
+
+
+Deploy to Netlify:npm run deploy
+
+
+Deploys to https://micro-auth-app.netlify.app.
+
 
 
 Architecture Decisions
 
-Module Federation: Exposes Login and UserProfile components, accessible via remoteEntry.js.
-CORS: Dev server includes Access-Control-Allow-Origin: * for cross-origin loading by the host.
-TypeScript: Uses .tsx for files with JSX (e.g., index.tsx, Login.tsx). Ensures type safety for components and shared dependencies.
-React 18: Uses createRoot for rendering (in index.tsx).
-Minimal Dependencies: Shares React, ReactDOM, and react-router-dom as singletons with the host.
+Webpack Module Federation: Exposes Login and UserProfile via remoteEntry.js, consumed by the host app for dynamic loading.
+TypeScript: Ensures type safety for components and shared ModuleMetadata interface.
+React with react-router-dom: Handles standalone routing for testing (/auth/login, /auth/profile).
+SPA Routing: Configured historyApiFallback in webpack.config.js for local SPA routing and netlify.toml for production.
+Public Routes: No permissions required, ensuring accessibility for all users, including unauthenticated ones.
 
 Communication Design
 
-User State: The Login component dispatches a userLoggedIn custom event with { username, role } to share user state with the host and other micro-frontends.
-Event-Based: Uses window.dispatchEvent for simplicity, avoiding complex state management libraries.
+Self-Registration: Dispatches moduleRegister event in index.tsx with metadata (name: auth, routes, components, permissions: [], URL).
+Authentication Events: Login component dispatches userLoggedIn with username and role (user or admin). UserProfile dispatches userLoggedOut on logout.
+Shared Dependencies: Shares react, react-dom, react-router-dom as singletons with the host to ensure consistency and reduce bundle size.
+CORS: netlify.toml sets Access-Control-Allow-Origin: * for remoteEntry.js access by the host.
 
-Demo Instructions
+Testing
 
-Local Demo:
-
-Run npm start to start the auth app on http://localhost:3001.
-Access via the host app (http://localhost:3000/auth/login) or directly for testing.
-Login sets the user role (e.g., 'admin') for role-based access.
-
-
-Deployed Demo:
-
-Deploy to Vercel: vercel --prod.
-Update the host's config.json with the deployed URL (e.g., https://auth-app.vercel.app/remoteEntry.js).
-Verify integration via the deployed host app.
+Local: Run npm start and test http://localhost:3001/auth/login. Verify userLoggedIn event in the host (http://localhost:3000/auth/login).
+Production: Test at https://micro-auth-app.netlify.app/auth/login and in the host at https://micro-host-app.netlify.app/auth/login.
+Self-Registration: Check console for Dispatched moduleRegister for auth-app log and host registration.
